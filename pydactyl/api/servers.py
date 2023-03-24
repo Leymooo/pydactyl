@@ -181,6 +181,7 @@ class Servers(base.PterodactylAPI):
                       swap_limit, disk_limit, location_ids=[], port_range=[],
                       environment={}, cpu_limit=0, io_limit=500,
                       database_limit=0, allocation_limit=0, backup_limit=0,
+                      threads=None,
                       docker_image=None, startup_cmd=None, dedicated_ip=False,
                       start_on_completion=True, oom_disabled=True,
                       default_allocation=None, additional_allocations=None, external_id=None, description=None):
@@ -220,6 +221,7 @@ class Servers(base.PterodactylAPI):
                     Must be between 10 and 1000.
             database_limit(int): Maximum number of databases that can be
                     assigned to this server.
+            threads(str):
             allocation_limit(int): Maximum number of allocations that can be
                     assigned to this server.
             backup_limit(int): Maximum number of backups that can be
@@ -281,6 +283,7 @@ class Servers(base.PterodactylAPI):
                 'disk': disk_limit,
                 'io': io_limit,
                 'cpu': cpu_limit,
+                'threads': threads
             },
             'feature_limits': {
                 'databases': database_limit,
@@ -337,7 +340,7 @@ class Servers(base.PterodactylAPI):
                             swap_limit=None, disk_limit=None, cpu_limit=None,
                             io_limit=None, database_limit=None,
                             allocation_limit=None, backup_limit=None,
-                            add_allocations=None,
+                            add_allocations=None, threads_limit=None,
                             remove_allocations=None, oom_disabled=None):
         """Updates the build configuration for an existing server.
 
@@ -379,6 +382,7 @@ class Servers(base.PterodactylAPI):
                     assigned to this server.
             backup_limit(int): Maximum number of backups that can be
                     assigned to this server.
+            threads_limit(str):
             add_allocations(iter): List of allocation IDs to add to the server.
             remove_allocations(iter): List of allocation IDs to remove from
                     the server.
@@ -400,6 +404,8 @@ class Servers(base.PterodactylAPI):
             data['limits']['cpu'] = cpu_limit
         if io_limit is not None:
             data['limits']['io'] = io_limit
+        if threads_limit is not None:
+            data['limits']['threads'] = threads_limit
         if database_limit is not None:
             data['feature_limits']['databases'] = database_limit
         if allocation_limit is not None:
